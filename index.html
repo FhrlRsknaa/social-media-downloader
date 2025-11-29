@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Social Media Downloader by Fahrul</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6650724904785089"
+      crossorigin="anonymous"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --primary: #f97316;
+      --primary-soft: #fed7aa;
+      --bg-dark: #05030a;
+      --card-dark: #14121b;
+      --accent: #f97316;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at top left, #1f2933, #050308 70%);
+      color: var(--text-main);
+      transition: background 0.4s ease, color 0.3s ease;
+    }
+
+    body.light-mode {
+      background:
+        radial-gradient(circle at top left, #ffffff, #e5e7eb 70%);
+      color: #111827;
+    }
+
+    .wrapper {
+      max-width: 1120px;
+      width: 100%;
+    }
+
+    .top-label {
+      letter-spacing: 0.17em;
+      text-transform: uppercase;
+      color: #fbbf24;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .main-card {
+      background: rgba(8, 7, 16, 0.95);
+      border-radius: 28px;
+      padding: 26px;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 22px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(20px);
+      transition: 0.4s ease;
+    }
+
+    body.light-mode .main-card {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.15);
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .headline h1 {
+      font-size: 32px;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .headline span.brand {
+      color: var(--primary);
+    }
+
+    .headline p {
+      font-size: 14px;
+      color: var(--text-muted);
+      max-width: 460px;
+    }
+
+    .form-box {
+      background: #18151f;
+      border-radius: 22px;
+      padding: 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.6);
+      margin-bottom: 10px;
+      transition: 0.35s ease;
+    }
+
+    body.light-mode .form-box {
+      background: linear-gradient(145deg, #ffffff, #f3f4f6);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: 1.6fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .input-row input {
+      width: 100%;
+      background: #020617;
+      border-radius: 999px;
+      padding: 11px 16px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      outline: none;
+      color: var(--text-main);
+      font-size: 13px;
+    }
+
+    .input-row input::placeholder {
+      color: #6b7280;
+    }
+
+    body.light-mode .input-row input {
+      background: #f9fafb;
+      color: #111827;
+      border-color: #d1d5db;
+    }
+
+    .btn-main {
+      border-radius: 999px;
+      border: none;
+      background: radial-gradient(circle at 20% 0%, #fed7aa, #f97316 55%, #ea580c 100%);
+      color: #111827;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 22px;
+      cursor: pointer;
+      box-shadow: 0 16px 35px rgba(248, 153, 47, 0.7);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.15s ease, box-shadow 0.18s ease, filter 0.15s ease;
+    }
+
+    .btn-main:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow: 0 18px 40px rgba(248, 153, 47, 0.85);
+    }
+
+    .helper-text {
+      margin-top: 6px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .status-text {
+      margin-top: 6px;
+      font-size: 12px;
+    }
+
+    .status-text.success {
+      color: #4ade80;
+    }
+
+    .status-text.error {
+      color: #f97373;
+    }
+
+    .wa-card {
+      padding: 13px 16px;
+      border-radius: 18px;
+      margin-top: 4px;
+      background: linear-gradient(145deg, #166534, #22c55e);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #ecfdf3;
+      text-decoration: none;
+      box-shadow: 0 16px 38px rgba(22, 163, 74, 0.5);
+      border: 1px solid rgba(190, 242, 100, 0.6);
+      font-size: 13px;
+      transition: 0.35s;
+    }
+
+    .wa-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wa-icon img {
+      width: 20px;
+      height: 20px;
+    }
+
+    .dev-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .dev-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111827;
+    }
+
+    .dev-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-card {
+      background: #0b0810;
+      border-radius: 22px;
+      padding: 18px 20px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    body.light-mode .preview-card {
+      background: linear-gradient(145deg, #ffffff, #f3f4f6);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.15);
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .preview-header span.sub {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .live-chip {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      color: #facc15;
+      border: 1px solid rgba(249, 115, 22, 0.7);
+    }
+
+    body.light-mode .live-chip {
+      background: #111827;
+    }
+
+    .preview-body {
+      margin-top: 8px;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, #451a03, #111827 60%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      overflow: hidden;
+    }
+
+    .preview-body video {
+      max-height: 100%;
+      max-width: 100%;
+      border-radius: 16px;
+    }
+
+    .preview-placeholder {
+      text-align: center;
+      padding: 40px 20px;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    .download-actions {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-outline {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 12px;
+      padding: 8px 16px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      background: #0f172a;
+      color: #fef3c7;
+    }
+
+    body.light-mode .btn-outline {
+      background: #e5e7eb;
+      color: #111827;
+      border-color: #cbd5e1;
+    }
+
+    body.light-mode .btn-outline:hover {
+      background: #f97316;
+      color: #111827;
+      border-color: #f97316;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+      width: 58px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      display: flex;
+      align-items: center;
+      padding: 3px;
+      cursor: pointer;
+      gap: 5px;
+      backdrop-filter: blur(10px);
+    }
+
+    .theme-toggle-inner {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #fde68a, #f59e0b);
+      transform: translateX(0);
+      transition: 0.25s ease;
+    }
+
+    .theme-toggle span.icon {
+      font-size: 13px;
+      margin-left: 3px;
+      color: #facc15;
+    }
+
+    body.light-mode .theme-toggle-inner {
+      transform: translateX(26px);
+      background: radial-gradient(circle at 30% 20%, #e5e7eb, #9ca3af);
+    }
+
+    @media (max-width: 900px) {
+      .main-card {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 16px;
+      }
+      .main-card {
+        padding: 18px;
+      }
+      .preview-body {
+        min-height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toggle theme -->
+  <div class="theme-toggle" id="theme-toggle">
+    <div class="theme-toggle-inner"></div>
+    <span class="icon">🌙</span>
+  </div>
+
+  <div class="wrapper">
+    <div class="top-label">TOOL DOWNLOAD VIDEO SOSIAL MEDIA</div>
+
+    <div class="main-card">
+      <!-- LEFT -->
+      <div class="left">
+        <div class="headline">
+          <h1>Social Media Downloader <span class="brand">by Fahrul</span></h1>
+          <p>Tempel link video dari <strong>TikTok, Instagram, Facebook, YouTube, dll</strong>, lalu unduh versi tanpa watermark atau audio musik untuk konten kamu.</p>
+        </div>
+
+        <div class="form-box">
+          <div class="form-label">Link Video</div>
+          <div class="input-row">
+            <input id="media-url" type="text" placeholder="Tempel link TikTok / IG / FB / YouTube..." />
+            <button id="download-btn" class="btn-main">
+              ⬇ Download
+            </button>
+          </div>
+          <div class="helper-text">Contoh: link share langsung dari sosial media, bukan link profil.</div>
+          <div id="status-text" class="status-text"></div>
+        </div>
+
+        <a href="https://wa.me/6285186814906" target="_blank" class="wa-card">
+          <div class="wa-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="26" alt="WA">
+          </div>
+          <div class="wa-text" style="color:white;font-size:13px;">
+            Silakan kirim masukan atau saran,<br>tapi ngga menerima 19 juta lapangan kerja 🫣
+          </div>
+        </a>
+
+        <div class="dev-tag">
+          <div class="dev-avatar">
+            <img src="avatar.jpg" alt="Fahrul Riskiana" />
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:600;">Developer by Fahrul Riskiana</div>
+            <div style="font-size:11px;">Tool simple tapi ngodingnya malas cik 😺</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="preview-card">
+        <div class="preview-header">
+          <div>
+            <div style="font-weight:600;">Preview Video</div>
+            <span class="sub">Hasil unduhan akan muncul di sini</span>
+          </div>
+          <div class="live-chip">Live Preview</div>
+        </div>
+
+        <div class="preview-body" id="preview-body">
+          <div class="preview-placeholder">
+            Belum ada video.<br />
+            Tempel link sosial media dan klik <strong>Download</strong>.
+          </div>
+        </div>
+
+        <div class="download-actions" id="download-actions"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const urlInput = document.getElementById("media-url");
+    const btn = document.getElementById("download-btn");
+    const statusText = document.getElementById("status-text");
+    const previewBody = document.getElementById("preview-body");
+    const actions = document.getElementById("download-actions");
+
+    async function triggerDownload(fileUrl, filename) {
+      try {
+        const res = await fetch(fileUrl);
+        const blob = await res.blob();
+        const objectUrl = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = objectUrl;
+        a.download = filename || "download";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(objectUrl);
+      } catch (err) {
+        alert("Gagal mengunduh file: " + err.message);
+      }
+    }
+
+    btn.addEventListener("click", async () => {
+      const mediaUrl = urlInput.value.trim();
+      statusText.textContent = "";
+      actions.innerHTML = "";
+
+      if (!mediaUrl) {
+        statusText.textContent = "Masukkan link video dulu ya.";
+        statusText.className = "status-text error";
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "Mengambil data...";
+      statusText.textContent = "Mengambil data media...";
+      statusText.className = "status-text";
+
+      try {
+        const res = await fetch("/api/download", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: mediaUrl })
+        });
+
+        const json = await res.json();
+        console.log("API:", json);
+
+        if (!res.ok || json.error) {
+          statusText.textContent = json.error || "Gagal mengambil media.";
+          statusText.className = "status-text error";
+          previewBody.innerHTML =
+            '<div class="preview-placeholder">Belum ada video.</div>';
+          btn.disabled = false;
+          btn.textContent = "⬇ Download";
+          return;
+        }
+
+        const medias = json.medias || [];
+        if (!medias.length) {
+          statusText.textContent = "Tidak menemukan media untuk link ini.";
+          statusText.className = "status-text error";
+          previewBody.innerHTML =
+            '<div class="preview-placeholder">Belum ada video.</div>';
+          btn.disabled = false;
+          btn.textContent = "⬇ Download";
+          return;
+        }
+
+        const videoMedia =
+          medias.find(m => m.type === "video" && m.quality === "hd_no_watermark") ||
+          medias.find(m => m.type === "video" && m.quality === "no_watermark") ||
+          medias.find(m => m.type === "video");
+
+        const audioMedia = medias.find(m => m.type === "audio");
+
+        if (!videoMedia) {
+          statusText.textContent = "Video tidak ditemukan pada respons API.";
+          statusText.className = "status-text error";
+          previewBody.innerHTML =
+            '<div class="preview-placeholder">Belum ada video.</div>';
+          btn.disabled = false;
+          btn.textContent = "⬇ Download";
+          return;
+        }
+
+        const videoUrl = videoMedia.url;
+        const audioUrl = audioMedia ? audioMedia.url : null;
+
+        previewBody.innerHTML =
+          `<video src="${videoUrl}" controls playsinline autoplay muted></video>`;
+
+        let buttonsHtml = `
+          <button class="btn-outline" id="btn-download-video">
+            ⬇ Download Video (${videoMedia.quality || "video"})
+          </button>
+        `;
+        if (audioUrl) {
+          buttonsHtml += `
+            <button class="btn-outline" id="btn-download-audio">
+              🎵 Download Audio
+            </button>
+          `;
+        }
+        actions.innerHTML = buttonsHtml;
+
+        setTimeout(() => {
+          const vBtn = document.getElementById("btn-download-video");
+          const aBtn = document.getElementById("btn-download-audio");
+
+          if (vBtn) {
+            vBtn.addEventListener("click", () => {
+              const ext = videoMedia.extension || "mp4";
+              triggerDownload(videoUrl, `video_${json.id || "download"}.${ext}`);
+            });
+          }
+
+          if (aBtn && audioUrl) {
+            aBtn.addEventListener("click", () => {
+              const ext = audioMedia.extension || "mp3";
+              triggerDownload(audioUrl, `audio_${json.id || "download"}.${ext}`);
+            });
+          }
+        }, 50);
+
+        statusText.textContent = `Berhasil! Sumber: ${json.source || "media"}`;
+        statusText.className = "status-text success";
+      } catch (e) {
+        console.error(e);
+        statusText.textContent = "Gagal koneksi ke server. Coba beberapa saat lagi.";
+        statusText.className = "status-text error";
+        previewBody.innerHTML =
+          '<div class="preview-placeholder">Belum ada video.</div>';
+      }
+
+      btn.disabled = false;
+      btn.textContent = "⬇ Download";
+    });
+
+    // Theme toggle
+    const themeToggle = document.getElementById("theme-toggle");
+
+    function applyThemeFromStorage() {
+      const saved = localStorage.getItem("ttdl-theme");
+      if (saved === "light") {
+        document.body.classList.add("light-mode");
+      }
+    }
+
+    applyThemeFromStorage();
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+      const mode = document.body.classList.contains("light-mode")
+        ? "light"
+        : "dark";
+      localStorage.setItem("ttdl-theme", mode);
+    });
+  </script>
+</body>
+</html>
